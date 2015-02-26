@@ -1,0 +1,91 @@
+# Test rule sid: 1-999
+# Testing rule
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"Don't check Scarlett during work"; content:"Scarlett"; nocase; classtype:policy-violation; sid:1; rev:1;) 
+
+# Ping test
+# alert ip $HOME_NET any -> any any (msg:"ICMP ping detected"; sid:2; rev:1;)
+
+# Drop Box
+alert udp $HOME_NET 17500 -> any 17500 (msg:"Apvera rules: ET POLICY Dropbox Client Broadcasting"; content:"{|22|host_int|22 3a| "; depth:13; content:" |22|version|22 3a| ["; distance:0; content:"], |22|displayname|22 3a| |22|"; distance:0; threshold:type limit, count 1, seconds 3600, track by_src; classtype:policy-violation; sid:1002; rev:3;)
+
+# Drop Box
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: ET POLICY Dropbox.com Offsite File Backup in Use"; flow:established,to_server; content:"/subscribe?host_int="; http_uri; content:"&ns_map="; http_uri; content:"&ts="; http_uri; content:".dropbox.com|0d 0a|"; threshold: type limit, count 1, seconds 300, track by_src; reference:url,www.dropbox.com; reference:url,dereknewton.com/2011/04/dropbox-authentication-static-host-ids/; classtype:policy-violation; sid:1003; rev:3;)
+
+# Drop Box only login to query the dropboxlocalhost.com
+alert dns $HOME_NET any ->  $EXTERNAL_NET any (msg:"Apvera rules: dns_query - dropboxlocalhost.com"; dns_query; content:"dropboxlocalhost.com"; classtype:misc-activity; sid:10031; rev:1;)
+
+# Google Drive Web - This rule works before Jan 20, now, it doesn't work! 
+alert http any any -> any any (msg:"Apvera rules: [HTTPS] drive.google.com Access"; content:"drive.google.com"; nocase; classtype:misc-activity; sid:1004; rev:1;)
+
+# Google Drive Client
+alert tcp any any -> any any (msg:"Apvera rules: [TCP] storage.googleapis.com detact"; content:"storage.googleapis.com"; nocase; classtype:misc-activity; sid:1005; rev:1;)
+
+# Google Drive MAC Client Upload file
+alert dns any any -> any any (msg:"Apvera rules: dns_query - large-uploads.l.google.com"; dns_query; content:"large-uploads.l.google"; classtype:misc-activity; sid:1007; rev:1;)
+alert dns any any -> any any (msg:"Apvera rules: dns_query - upload.drive.google.com"; dns_query; content:"upload.drive.google"; classtype:misc-activity; sid:1008; rev:1;)
+alert dns any any -> any any (msg:"Apvera rules: dns_query - drive.google.com"; dns_query; content:"drive.google"; classtype:misc-activity; sid:1009; rev:1;)
+
+# clients[1-9].google.com
+# alert dns any any -> any any (msg:"Apvera rules: dns_query - clients[0-9].google.com"; dns_query; content:"clients"; pcre:"/[0-9]/"; content:".google.com"; classtype:misc-activity; sid:1010; rev:1;)
+
+# dropbox url
+# alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: dropbox.com url access"; content:"dropbox.com"; nocase; fast_pattern: only; classtype:misc-activity; sid:1011; rev:1;)
+
+# youtube.com
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: youtube.com url access"; content:"youtube.com"; nocase; fast_pattern: only; classtype:misc-activity; sid:1012; rev:1;)
+
+# evernote.com 
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: dns_query - evernote.com"; dns_query; content:"evernote.com"; classtype:misc-activity; sid:1013; rev:1;)
+alert tls $EXTERNAL_NET any -> $HOME_NET any (msg:"Apvera rules: tls certificate - evernote client access, announce.evernote.com"; flow:established,from_server; content:"announce.evernote.com"; classtype:protocol-command-decode; sid:1014; rev:1;)
+
+# Spotify
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: Spotify.com client hello - ssl"; flow:established; content:"www.spotify.com"; classtype:misc-activity; sid:1015; rev:1;)
+# alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: dns_query, spotify.com login - sb.scorecardresearch "; dns_query; content:"sb.scorecardresearch"; classtype:misc-activity; sid:1027; rev:1;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"Apvera rules: RTMP stream detect"; content:"|63 72 65 61 74 65 53 74 72 65 61 6D|"; reference:url,en.wikipedia.org/wiki/Real_Time_Messaging_Protocol; classtype:misc-activity; sid:1029; rev:1;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: Spotify client, dns_query, apresolve.spotify.com"; dns_query; content:"apresolve.spotify.com"; classtype:misc-activity; sid:1030; rev:1;)
+
+# hootsuite 
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: [HTTP] hootsuite.com Access"; content:"hootsuite.com"; nocase; http_uri; classtype:misc-activity; sid:1016; rev:1;)
+alert tls $EXTERNAL_NET any -> $HOME_NET any (msg:"Apvera rules: tls certificate - .hootsuit.com"; flow:established,from_server; content:".hootsuite.com"; classtype:protocol-command-decode; sid:1017; rev:1;)
+
+
+# Box.com
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: [HTTP] box.com Access"; content:"box.com"; nocase; classtype:misc-activity; sid:1018; rev:1;)
+alert tls $EXTERNAL_NET any -> $HOME_NET any (msg:"Apvera rules: tls certificate - .realtime.services.box.net"; flow:established,from_server; content:".realtime.services.box.net"; classtype:protocol-command-decode; sid:1020; rev:1;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: box client, dns_query - api.box.com"; dns_query; content:"api.box.com"; classtype:misc-activity; sid:1024; rev:1;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: box.com, webapp & client, dns_query - realtime.services.box.net"; dns_query; content:"realtime.services.box.net"; classtype:misc-activity; sid:1025; rev:1;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: box.com, webapp, dns_query - edit.boxlocalhost.com"; dns_query; content:"edit.boxlocalhost.com"; classtype:misc-activity; sid:1026; rev:1;)
+
+# Pocket.com 
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: [HTTP] pocket.com http user login"; flow:established,to_server; content:"/a/queue"; content:"getpocket.com|0d 0a|"; http_header; classtype:misc-activity; sid:1021; rev:1;)
+
+# OneDrive
+# alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"Apvera rules: [HTTP] onedrive.live.com - onedrive.live.com"; flow:established,from_server; content:"onedrive.live.com"; classtype:protocol-command-decode; sid:1022; rev:1;)
+alert tls $EXTERNAL_NET any -> $HOME_NET any (msg:"Apvera rules: tls certificate - OneDrive Prod (when user already login)"; flow:established,from_server; content:"OneDrive Prod"; classtype:protocol-command-decode; sid:1023; rev:1;)
+
+# Google Hangouts
+alert dns any any -> any any (msg:"Apvera rules: hangouts"; dns_query; content:"hangouts";  classtype:misc-activity; sid:1031; rev:1;)
+#alert dns any any -> any any (msg:"Apvera rules: [DNS] hangouts web, talkgadget.google.com"; dns_query; content:"talkgadget.google.com"; classtype:misc-activity; sid:1032; rev:1;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: inside gmail web frame, talkgadget.google.com"; flow:established; content:"talkgadget.google.com"; classtype:misc-activity; sid:1034; rev:1;)
+
+
+# Concur
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: [DNS] concursolutions.com"; dns_query; content:"concursolutions.com"; classtype:misc-activity; sid:1033; rev:1;)
+
+# Linkedin
+alert tls any any -> any any (msg:"Apvera rules: tls certificate - www.linkedin.com"; content:"www.linkedin.com"; classtype:protocol-command-decode; sid:1035; rev:1;)
+
+# play.google.com
+alert http $HOME_NET any -> $EXTERNAL_NET $HTTP_PORTS (msg:"Apvera rules: play.google.com"; content:"play.google.com"; http_uri; nocase; classtype:not-suspicious; sid:1036; rev:6;)
+
+# REJECT RULES
+# Facebook
+# alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: facebook is blocked"; content:"facebook.com"; nocase; fast_pattern: only; classtype:policy-violation; sid:5000; rev:1;)
+
+# this doesen't work for facebook
+# reject http $HOME_NET any -> $EXTERNAL_NET any (msg:"Apvera rules: facebook http is blocked"; content:"facebook.com"; classtype:policy-violation; sid:5001; rev:1;)
+
+# Lua script
+#alert tcp any any -> any any (msg:"LUA for evernote"; luajit:config/test.lua; sid:10000; rev:1;)
+#alert tcp any any -> any any (msg:"LUA for dropbox"; luajit:lua/dropbox.lua; sid:10001; rev:1;)
+
