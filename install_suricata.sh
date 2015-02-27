@@ -81,7 +81,7 @@ apt-get install -y oinkmaster
 # ref: https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Rule_Management_with_Oinkmaster
 TOREPLACE="# url = http://www.emergingthreats.net/rules/emerging.rules.tar.gz"
 REPLACETO="url = http://rules.emergingthreats.net/open/suricata/emerging.rules.tar.gz"
-sed -i "s,$TOREPLACE,$REPLACETO,g" oinkmaster.conf
+sed -i "s,$TOREPLACE,$REPLACETO,g" /etc/oinkmaster.conf
 mkdir -p /etc/suricata/rules
 #cd /etc
 oinkmaster -C /etc/oinkmaster.conf -o /etc/suricata/rules
@@ -89,4 +89,4 @@ oinkmaster -C /etc/oinkmaster.conf -o /etc/suricata/rules
 # Disable ubunut GUI
 # update-rc.d -f lightdm disable
 
-cowsay "suricata oinkmaster installation DONE"
+cowsay DONE
