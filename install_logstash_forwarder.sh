@@ -24,25 +24,29 @@ mkdir -p ~/Downloads
 cd ~/Downloads
 echo "download to go1.4.2 to" `pwd`
 wget https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
+echo 
 tar -C /usr/local -xzf go1.4.2.linux-amd64.tar.gz
-echo '\nexport PATH=$PATH:/usr/local/go/bin\n' >> ~/.profile
+echo "uncompressing go1.4.2.linux-amd64.tar.gz ..."
+echo -e '\nexport PATH=$PATH:/usr/local/go/bin\n' >> ~/.profile
 source ~/.profile
 
 # compile logstash-forwarder 64bit
-echo "git clone logstash-forwarder repos to" `pwd`
+echo "git clone logstash-forwarder repository to" `pwd`
 git clone https://github.com/elasticsearch/logstash-forwarder.git
 cd logstash-forwarder/
+echo "go compiling ..."
 go build
 
-# install it
+# copy the compile file to bin
 DEST='/opt/logstash-forwarder/bin/'
 mkdir -p $DEST 
 cp logstash-forwarder $DEST
 
 # download logstash.key to probe
-apt-get install -y sshpass
 mkdir -p /etc/logstash-forwarder
-sshpass -p "v1rtual@!" scp azureuser@collector.apvera.net:/etc/logstash/logstash.crt /tmp/
+#sshpass -p "v1rtual@!" scp azureuser@collector.apvera.net:/etc/logstash/logstash.crt /tmp/
+# apt-get install -y sshpass
+scp collector:/etc/logstash/logstash.crt /tmp/
 mv /tmp/logstash.crt /etc/logstash-forwarder/
 
 #Create logstash-forwarder configuration file
