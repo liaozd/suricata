@@ -3,6 +3,7 @@
 
 MYFULLPATH=`realpath dirname $0`
 SRCPATH=`dirname $MYFULLPATH`
+mkdir -p ~/Downloads
 
 apt-get update
 apt-get upgrade -y
@@ -26,6 +27,7 @@ apt-get install -y lua5.2
 apt-get install -y coccinelle
 apt-get install -y libmagic-dev
 
+cd ~/Downloads
 # Pre-installation requirements
 # ref: https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Ubuntu_Installation
 apt-get -y install libpcre3 libpcre3-dbg libpcre3-dev \
@@ -38,7 +40,6 @@ make libmagic-dev
 apt-get -y install libnetfilter-queue-dev libnetfilter-queue1 libnfnetlink-dev libnfnetlink0
 
 # install LuaJIT
-mkdir -p ~/Downloads
 cd ~/Downloads
 wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz
 tar -xvf LuaJIT-2.0.3.tar.gz
