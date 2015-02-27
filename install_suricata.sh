@@ -4,22 +4,20 @@
 apt-get update
 apt-get upgrade -y
 
+# install tools needed
+apt-get install -y vim tree whois links bmon iftop nmap
+
 # vim settings
 git clone git://github.com/amix/vimrc.git ~/.vim_runtime
 sh ~/.vim_runtime/install_basic_vimrc.sh
-
-# install tools needed
-apt-get install -y vim tree whois links bmon iftop
-
-# install lua
-apt-get install -y lua5.2
-
-cd /tmp
 
 # install dependence package for suricata
 apt-get install -y gcc
 apt-get install -y pkg-config
 apt-get install -y libjansson*
+
+# install lua
+apt-get install -y lua5.2
 
 # for spatch
 apt-get install -y coccinelle
@@ -37,12 +35,15 @@ make libmagic-dev
 apt-get -y install libnetfilter-queue-dev libnetfilter-queue1 libnfnetlink-dev libnfnetlink0
 
 # install LuaJIT
+mkdir -p ~/Downloads
+cd Downloads
 wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz
 tar -xvf LuaJIT-2.0.3.tar.gz
 cd LuaJIT-2.0.3/
 make && make install
 
 # install libcap
+cd ~/Downloads
 wget http://people.redhat.com/sgrubb/libcap-ng/libcap-ng-0.7.4.tar.gz
 tar -xzvf libcap-ng-0.7.4.tar.gz
 cd libcap-ng-0.7.4
@@ -57,6 +58,7 @@ ldconfig
 # http://unix.stackexchange.com/questions/7641/download-and-install-latest-deb-package-from-github-via-terminal
 # https://redmine.openinfosecfoundation.org/projects/suricata/wiki/_logstash_kibana_and_suricata_json_output
 # Suricata
+cd ~/Downloads
 wget http://www.openinfosecfoundation.org/download/suricata-2.1beta3.tar.gz
 tar -xvf suricata-2.1beta3.tar.gz
 cd suricata-2.1beta3/
@@ -64,8 +66,8 @@ cd suricata-2.1beta3/
 make
 make install-full
 
-
 # enable inline iptables init to /etc/rc.local
+cd `dirname $0`
 SHELLPATH=`readlink -f setup_inline_network.sh`
 if [ -f $SHELLPATH ]; then 
     INSERT_LINE="sh $SHELLPATH"
@@ -77,11 +79,11 @@ cp `dirname $0`/config/suricata.conf /etc/init/
 # install rule management Oinkmaster
 apt-get install -y oinkmaster
 # ref: https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Rule_Management_with_Oinkmaster
-# add one line url = http://rules.emergingthreats.net/open/suricata/emerging.rules.tar.gz
-# TODO insert line by sed
-#WIP: sed -nE '/# url /,/emerging.rules.tar.gz/p' oinkmaster.conf
+TOREPLACE="# url = http://www.emergingthreats.net/rules/emerging.rules.tar.gz"
+REPLACETO="url = http://rules.emergingthreats.net/open/suricata/emerging.rules.tar.gz"
+sed -i "s,$TOREPLACE,$REPLACETO,g" oinkmaster.conf
 mkdir -p /etc/suricata/rules
-cd /etc
+#cd /etc
 oinkmaster -C /etc/oinkmaster.conf -o /etc/suricata/rules
 
 # Disable ubunut GUI
