@@ -20,14 +20,13 @@
 #update-rc.d logstash-forwarder defaults
 
 # install GO to compile logstash-forwarder
-cd ~
-mkdir -p Downloads
-cd Downloads
+mkdir -p ~/Downloads
+cd ~/Downloads
 echo "download to go1.4.2 to" `pwd`
 wget https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
 tar -C /usr/local -xzf go1.4.2.linux-amd64.tar.gz
-echo '\nexport PATH=$PATH:/usr/local/go/bin\n' >> $HOME/.profile
-source .profile
+echo '\nexport PATH=$PATH:/usr/local/go/bin\n' >> ~/.profile
+source ~/.profile
 
 # compile logstash-forwarder 64bit
 echo "git clone logstash-forwarder repos to" `pwd`

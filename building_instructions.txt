@@ -4,7 +4,6 @@
 
     run virtualbox_server_config.sh
 
-
 - Virtualbox client:
     echo 'nameserver 8.8.8.8' | sudo tee /etc/resolv.conf
 
@@ -18,7 +17,8 @@
       route-queue: 2
       batchcount: 20
       fail-open: yes
-
+    
+    # iptables forward to NFQUEUE
     iptables -I FORWARD -j NFQUEUE --queue-num 0 --queue-bypass 
 
     iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
@@ -26,4 +26,5 @@
     echo "1" > /proc/sys/net/ipv4/ip_dynaddr
     
     suricata -c config/suricata.yaml -s config/apvera-app.rules -q 0
+
 
