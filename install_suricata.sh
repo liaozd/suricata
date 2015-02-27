@@ -5,7 +5,7 @@ apt-get update
 apt-get upgrade -y
 
 # install tools needed
-apt-get install -y vim tree whois links bmon iftop nmap
+apt-get install -y vim tree whois links bmon iftop nmap cowsay
 
 # vim settings
 git clone git://github.com/amix/vimrc.git ~/.vim_runtime
@@ -36,7 +36,7 @@ apt-get -y install libnetfilter-queue-dev libnetfilter-queue1 libnfnetlink-dev l
 
 # install LuaJIT
 mkdir -p ~/Downloads
-cd Downloads
+cd ~/Downloads
 wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz
 tar -xvf LuaJIT-2.0.3.tar.gz
 cd LuaJIT-2.0.3/
@@ -88,3 +88,5 @@ oinkmaster -C /etc/oinkmaster.conf -o /etc/suricata/rules
 
 # Disable ubunut GUI
 # update-rc.d -f lightdm disable
+
+cowsay "suricata oinkmaster installation DONE"
