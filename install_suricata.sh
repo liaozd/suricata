@@ -9,7 +9,7 @@ apt-get update
 apt-get upgrade -y
 
 # install tools needed
-apt-get install -y vim tree whois links bmon iftop nmap cowsay realpath
+apt-get install -y vim tree whois links bmon iftop nmap cowsay realpath sysv-rc-conf
 
 # vim settings
 git clone git://github.com/amix/vimrc.git ~/.vim_runtime

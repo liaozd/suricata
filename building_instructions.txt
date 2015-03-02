@@ -27,4 +27,4 @@
     
     suricata -c config/suricata.yaml -s config/apvera-app.rules -q 0
 
-
+- 
