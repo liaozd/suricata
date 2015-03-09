@@ -11,7 +11,6 @@ apt-get install -y terminator slurm
 # install network monitor app
 apt-get install -y tcpick bmon iftop
 
-
 # install wireshark
 apt-get install -y wireshark
 addgroup -quiet -system wireshark
@@ -20,12 +19,15 @@ setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap
 usermod -a -G wireshark apvera
 
 # install webmin
-apt-get install -y perl libnet-ssleay-perl libauthen-pam-perl libpam-runtime openssl libio-pty-perl apt-show-versions python
-wget -P ~/Download/ http://www.webmin.com/download/deb/webmin-current.deb
-dpkg --install ~/Download/webmin-current.deb
+#apt-get install -y perl libnet-ssleay-perl libauthen-pam-perl libpam-runtime openssl libio-pty-perl apt-show-versions python
+#wget -P ~/Download/ http://www.webmin.com/download/deb/webmin-current.deb
+#dpkg --install ~/Download/webmin-current.deb
 
 # prepare to install elasticsearch
 # add-apt-repository ppa:webupd8team/java
 # apt-get update
 # apt-get install oracle-java7-installer
 # java -version
+
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb
+dpkg -i google-chrome-stable_current_i386.deb
