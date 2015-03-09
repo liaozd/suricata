@@ -6,13 +6,11 @@ sh ~/.vim_runtime/install_basic_vimrc.sh
 
 # install packages 
 apt-get update
-apt-get install -y vim tree sysv-rc-conf python-pip python-dev terminator whois links slurm
+apt-get install -y terminator slurm
 
 # install network monitor app
 apt-get install -y tcpick bmon iftop
 
-# install aniable
-pip install ansible
 
 # install wireshark
 apt-get install -y wireshark

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # compile a suricata on a ubuntu machine
 
-MYFULLPATH=`realpath dirname $0`
-SRCPATH=`dirname $MYFULLPATH`
 mkdir -p ~/Downloads
 
 apt-get update
@@ -70,16 +68,8 @@ cd suricata-2.1beta3/
 make
 make install-full
 
-# enable inline iptables init to /etc/rc.local
-cd $SRCPATH
-SHELLPATH=`realpath setup_inline_network.sh`
-if [ -f $SHELLPATH ]; then 
-    INSERT_LINE="sh $SHELLPATH"
-    sed -i "s~^exit 0$~$INSERT_LINE\n&~" /etc/rc.local
-fi
-
-# enable suricata init 
-cp $SRCPATH/config/suricata.conf /etc/init/
+# enable init
+sh ./install_init_app.sh
 
 # install rule management Oinkmaster
 apt-get install -y oinkmaster
