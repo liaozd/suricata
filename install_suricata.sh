@@ -9,7 +9,7 @@ apt-get update
 apt-get upgrade -y
 
 # install tools needed
-apt-get install -y vim tree whois links bmon iftop nmap cowsay realpath sysv-rc-conf
+apt-get install -y vim tree whois links bmon iftop nmap cowsay realpath sysv-rc-conf htop
 
 # vim settings
 git clone git://github.com/amix/vimrc.git ~/.vim_runtime
@@ -77,6 +77,7 @@ if [ -f $SHELLPATH ]; then
     INSERT_LINE="sh $SHELLPATH"
     sed -i "s~^exit 0$~$INSERT_LINE\n&~" /etc/rc.local
 fi
+
 # enable suricata init 
 cp $SRCPATH/config/suricata.conf /etc/init/
 
