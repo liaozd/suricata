@@ -1,7 +1,7 @@
 #!/bin/bash
 
-EXTIF="eth0"
-INTIF="eth1"
+EXTIF="eth1"
+INTIF="eth0"
 
 echo "External NIC: $EXTIF"
 echo "Internal NIC: $INTIF"

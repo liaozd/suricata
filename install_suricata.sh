@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # compile a suricata on a ubuntu machine
 
+MYFULLPATH=`realpath dirname $0`
+SRCPATH=`dirname $MYFULLPATH`
+mkdir -p ~/Downloads
+
 apt-get update
 apt-get upgrade -y
 
 # install tools needed
-apt-get install -y vim tree whois links bmon iftop nmap
+apt-get install -y vim tree whois links bmon iftop nmap cowsay realpath sysv-rc-conf
 
 # vim settings
 git clone git://github.com/amix/vimrc.git ~/.vim_runtime
@@ -23,6 +27,7 @@ apt-get install -y lua5.2
 apt-get install -y coccinelle
 apt-get install -y libmagic-dev
 
+cd ~/Downloads
 # Pre-installation requirements
 # ref: https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Ubuntu_Installation
 apt-get -y install libpcre3 libpcre3-dbg libpcre3-dev \
@@ -35,8 +40,7 @@ make libmagic-dev
 apt-get -y install libnetfilter-queue-dev libnetfilter-queue1 libnfnetlink-dev libnfnetlink0
 
 # install LuaJIT
-mkdir -p ~/Downloads
-cd Downloads
+cd ~/Downloads
 wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz
 tar -xvf LuaJIT-2.0.3.tar.gz
 cd LuaJIT-2.0.3/
@@ -67,24 +71,26 @@ make
 make install-full
 
 # enable inline iptables init to /etc/rc.local
-cd `dirname $0`
-SHELLPATH=`readlink -f setup_inline_network.sh`
+cd $SRCPATH
+SHELLPATH=`realpath setup_inline_network.sh`
 if [ -f $SHELLPATH ]; then 
     INSERT_LINE="sh $SHELLPATH"
     sed -i "s~^exit 0$~$INSERT_LINE\n&~" /etc/rc.local
 fi
 # enable suricata init 
-cp `dirname $0`/config/suricata.conf /etc/init/
+cp $SRCPATH/config/suricata.conf /etc/init/
 
 # install rule management Oinkmaster
 apt-get install -y oinkmaster
 # ref: https://redmine.openinfosecfoundation.org/projects/suricata/wiki/Rule_Management_with_Oinkmaster
 TOREPLACE="# url = http://www.emergingthreats.net/rules/emerging.rules.tar.gz"
 REPLACETO="url = http://rules.emergingthreats.net/open/suricata/emerging.rules.tar.gz"
-sed -i "s,$TOREPLACE,$REPLACETO,g" oinkmaster.conf
+sed -i "s,$TOREPLACE,$REPLACETO,g" /etc/oinkmaster.conf
 mkdir -p /etc/suricata/rules
-#cd /etc
 oinkmaster -C /etc/oinkmaster.conf -o /etc/suricata/rules
+
+#END message
+cowsay suricata installation DONE!!
 
 # Disable ubunut GUI
 # update-rc.d -f lightdm disable
