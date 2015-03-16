@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo "v1rtual@!"
 uname -a
 echo "must be run on the server side"
 

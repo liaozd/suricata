@@ -2,7 +2,7 @@
 # deploy collector server ssh key in the client
 # so don't need to input password when ssh/scp
 
-SERVER="collector.apvera.net" #server hostname
+SERVER="collector.net" #server hostname
 USER="azureuser" #login user name
 
 cd ~/.ssh
