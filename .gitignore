@@ -1,0 +1,8 @@
+# keys
+*.pem
+
+#
+.DS_Store
+
+# 
+.swp
